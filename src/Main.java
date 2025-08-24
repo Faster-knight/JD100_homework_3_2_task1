@@ -1,6 +1,4 @@
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -17,6 +15,7 @@ public class Main {
         int totalCost = 0;
 
         while (true) {
+            // ---- Создание нового заказа
             System.out.println("\nЗаполнение нового заказа.");
             System.out.print("Введите страну: ");
             String country = scanner.next();
@@ -28,19 +27,14 @@ public class Main {
             System.out.print("Введите вес (кг): ");
             int weight = scanner.nextInt();
             Address currentAddress = new Address(country, city);
-            boolean in_active_address = false;
-            for (Map.Entry<Address, Integer> entry : costPerAddress.entrySet()) {
-                if (entry.getKey().getCountry().equals(country) &&
-                        entry.getKey().getCity().equals(city)) {
-                    in_active_address = true;
-                    currentAddress = entry.getKey();
-                    break;
-                }
-            }
+            // Проверка наличия адреса в активных
+            boolean in_active_address = costPerAddress.containsKey(currentAddress);
+            // Решение об отказе обслуживания
             if (!in_active_address) {
                 System.out.println("Доставки по этому адресу нет");
                 continue;
             }
+            // Расчет стоимости
             Integer costPerKg = costPerAddress.get(currentAddress);
             int deliveryCost = costPerKg * weight;
             totalCost += deliveryCost;
